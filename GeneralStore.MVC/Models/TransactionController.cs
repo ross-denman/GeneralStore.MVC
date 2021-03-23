@@ -1,123 +1,121 @@
-﻿using GeneralStore.MVC.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
-namespace GeneralStore.MVC.Controllers
+namespace GeneralStore.MVC.Models
 {
-    public class ProductController : Controller
+    public class TransactionController : Controller
     {
-
         // Add the application DB Context (link to the database)
 
         private ApplicationDbContext _db = new ApplicationDbContext();
-        
-        // GET: Product
+
+        // GET: Transaction
         public ActionResult Index()
         {
-            List<Product> productList = _db.Products.ToList();
-            List<Product> orderedList = productList.OrderBy(prod => prod.Name).ToList();
+            List<Transaction> transactionList = _db.Transactions.ToList();
+            List<Transaction> orderedList = transactionList.OrderBy(trx => trx.TransactionID).ToList();
             return View(orderedList);
         }
 
-        // GET: Product
+        // GET: Transaction
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Product
+        // POST: Transaction
         [HttpPost]
-        public ActionResult Create (Product product)
+        public ActionResult Create(Transaction transaction)
         {
             if (ModelState.IsValid)
             {
-                _db.Products.Add(product);
+                _db.Transactions.Add(transaction);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(product);
+            return View(transaction);
         }
 
         // GET : Delete
-        // Product/Delete/{id}
-        public ActionResult Delete (int? id)
+        // Transaction/Delete/{id}
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = _db.Products.Find(id);
-            if (product == null)
+            Transaction transaction = _db.Transactions.Find(id);
+            if (transaction == null)
             {
                 return HttpNotFound();
             }
-            return View(product);
+            return View(transaction);
         }
 
         // POST : Delete
-        // Product/Delete/{id}
+        // Transaction/Delete/{id}
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            Product product = _db.Products.Find(id);
-            _db.Products.Remove(product);
+            Transaction transaction = _db.Transactions.Find(id);
+            _db.Transactions.Remove(transaction);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
 
         // GET : Edit
-        // Product/Edit/{id}
+        // Transaction/Edit/{id}
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = _db.Products.Find(id);
-            if(product == null)
+            Transaction transaction = _db.Transactions.Find(id);
+            if (transaction == null)
             {
                 return HttpNotFound();
             }
-            return View(product);
+            return View(transaction);
         }
 
         // POST : Edit
-        // Product/Edit/{id]
+        // Transaction/Edit/{id]
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit (Product product)
+        public ActionResult Edit(Transaction transaction)
         {
             if (ModelState.IsValid)
             {
-                _db.Entry(product).State = System.Data.Entity.EntityState.Modified;
+                _db.Entry(transaction).State = System.Data.Entity.EntityState.Modified;
                 _db.SaveChanges();
                 return RedirectToAction("index");
             }
-            return View(product);
+            return View(transaction);
         }
 
         // GET : Details
-        // Product/Details/{id}
+        // Transaction/Details/{id}
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = _db.Products.Find(id);
+            Transaction transaction = _db.Transactions.Find(id);
 
-            if(product == null)
+            if (transaction == null)
             {
                 return HttpNotFound();
             }
 
-            return View(product);
+            return View(transaction);
         }
     }
 }
